@@ -34,20 +34,31 @@ class Worker(object):
 
 
     def __do_work(self):
-        self.__log('worker thread start')
+        self.__info('worker thread start')
         while True:
             work = self._queue.get()
             if work is None:
                 break
-            self.__log('work start')
+            self.__info('work start')
             start_time = time.time()
-            getattr(work, self._work_name)()
+            try:
+                getattr(work, self._work_name)()
+            except AttributeError as atte:
+                self.__error('Exception when calling %s\n' % atte)
             elapsed_time = time.time() - start_time
-            self.__log('work finish: {0}'.format(elapsed_time) + '[sec.]')
+            self.__info('work finish: {0}'.format(elapsed_time) + '[sec.]')
             self._queue.task_done()
             if self._follower is not None:
                 self._follower.request(work)
-        self.__log('worker thread stop')
+        self.__info('worker thread stop')
+
+
+    def __info(self, message):
+        self.logger.info(self._work_name + ' ' + message)
+    
+
+    def __error(self, message):
+        self.logger.error(self._work_name + ' ' + message)
 
 
     def request(self, work):
@@ -62,7 +73,4 @@ class Worker(object):
         self._thread.join()
         self._thread = None
 
-
-    def __log(self, message):
-        logger = logging.getLogger(__name__)
-        logger.info(self._work_name + ' ' + message)
+ 
