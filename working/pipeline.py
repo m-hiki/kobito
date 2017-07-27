@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import time
-from work.worker import Worker
+import working
 
 
 class Pipeline(object):
@@ -17,7 +17,7 @@ class Pipeline(object):
         self.workers = []
         prev_worker = None
         for _ in range(step):
-            self.workers.append(Worker(follower=prev_worker))
+            self.workers.append(working.Worker(follower=prev_worker))
             prev_worker = self.workers[-1]
 
         self.log.info('pipeline start')

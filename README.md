@@ -19,8 +19,15 @@ pip install git+https://github.com/m-hiki/working.git
 Install via [Setuptools](http://pypi.python.org/pypi/setuptools).
 
 ```sh
-python setup.py install --user
+python setup.py install --user --records installed
 ```
+
+uninstall
+
+```sh
+cat installed | xargs rm -rf
+```
+
 
 ## Getting Started
 ### Use Worker
