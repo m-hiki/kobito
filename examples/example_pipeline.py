@@ -14,7 +14,7 @@ class Example(object):
     def __init__(self, name):
         self.name = name
 
-    def hello(self):
+    def (self):
         """task"""
         print('Hello, ' + self.name + '!')
 

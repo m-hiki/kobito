@@ -17,21 +17,18 @@ MAX_QUEUE_SIZE = 2000
 class Worker(object):
     """Workers is a task executer with a queue."""
 
-
     def __init__(self, work_name='run', follower=None):
         self.logger = logging.getLogger(__name__)
         self._work_name = work_name
         self._queue = queue.Queue(maxsize=MAX_QUEUE_SIZE)
         self._thread = threading.Thread(target=self.__do_work)
-        #thread.setDaemon(True)
-        self._thread.start()
+        # thread.setDaemon(True)
         self._follower = follower
-
+        self._thread.start()
 
     def __del__(self):
         if self._thread is not None:
             self.stop()
-
 
     def __do_work(self):
         self.__info('worker thread start')
@@ -52,19 +49,19 @@ class Worker(object):
                 self._follower.request(work)
         self.__info('worker thread stop')
 
-
     def __info(self, message):
         self.logger.info(self._work_name + ' ' + message)
-    
 
     def __error(self, message):
         self.logger.error(self._work_name + ' ' + message)
 
+    def set_work_name(self, work_name):
+        """set_work_name"""
+        self._work_name = work_name
 
     def request(self, work):
         """request"""
         self._queue.put(work)
-
 
     def stop(self):
         """stop"""
@@ -72,5 +69,3 @@ class Worker(object):
         self._queue.put(None)
         self._thread.join()
         self._thread = None
-
- 
