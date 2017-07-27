@@ -17,7 +17,7 @@ class Pipeline(object):
         self.workers = []
         prev_worker = None
         for _ in range(step):
-            self.workers.append(Worker(num_thread=1, follower=prev_worker))
+            self.workers.append(Worker(follower=prev_worker))
             prev_worker = self.workers[-1]
 
         self.log.info('pipeline start')
